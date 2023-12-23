@@ -8,3 +8,15 @@ class Review(BaseModel):
     place_id = ""
     user_id = ""
     text = ""
+
+    def __init__(self, *args, **kwargs):
+        """Initialize Review instance"""
+        super().__init__(*args, **kwargs)
+
+    def __str__(self):
+        """Return the string representation of Review"""
+        return "[{}] ({}) {}".format(
+            self.__class__.__name__,
+            self.id,
+            self.to_dict()
+        )
