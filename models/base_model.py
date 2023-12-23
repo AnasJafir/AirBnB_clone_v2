@@ -8,6 +8,8 @@ class BaseModel:
     """A base class for all hbnb models"""
     def __init__(self, *args, **kwargs):
         """Instatntiates a new model"""
+        if kwargs.get('__class__'):
+            del kwargs['__class__']
         if not kwargs:
             from models import storage
             self.id = str(uuid.uuid4())
