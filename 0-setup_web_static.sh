@@ -1,5 +1,4 @@
 #!/usr/bin/env bash
-
 # Check if Nginx is installed
 if ! command -v nginx &> /dev/null
 then
@@ -27,7 +26,7 @@ sudo ln -sf /data/web_static/releases/test/ /data/web_static/current
 sudo chown -R ubuntu:ubuntu /data/
 
 # Configure the Nginx configuration to serve content of /data/web_static/current/ to hbnb_static
-sudo sed -i "38i \\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n" /etc/nginx/sites-available/default
+sudo sed -i "51 i \\\tlocation /hbnb_static/ {\n\t\talias /data/web_static/current/;\n\t}\n" /etc/nginx/sites-available/default
 
 # Restart Nginx
 sudo service nginx restart
