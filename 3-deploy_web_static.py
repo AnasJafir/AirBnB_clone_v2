@@ -60,3 +60,9 @@ def deploy():
     if archive_path is None:
         return False
     return do_deploy(archive_path)
+    try:
+        put("my_index.html", "/data/web_static/releases/{}/".format(
+            archive_path.split("/")[-1].split(".")[0]))
+        return True
+    except Exception:
+        return False
