@@ -13,6 +13,16 @@ env.user = 'ubuntu'
 env.key_filename = '~/.ssh/school'
 
 
+def deploy():
+    """
+    Creates and distributes an archive to your web servers
+    """
+    archive_path = do_pack()
+    if archive_path is None:
+        return False
+    return do_deploy(archive_path)
+
+
 def do_pack():
     """
     Creates an archive from web_static directory
@@ -47,22 +57,6 @@ def do_deploy(archive_path):
         run("rm -rf /data/web_static/current")
         run('ln -s {}{}/ /data/web_static/current'.format(path, no_extension))
         print("New version deployed!")
-        return True
-    except Exception:
-        return False
-
-
-def deploy():
-    """
-    Creates and distributes an archive to your web servers
-    """
-    archive_path = do_pack()
-    if archive_path is None:
-        return False
-    return do_deploy(archive_path)
-    try:
-        put("my_index.html", "/data/web_static/releases/{}/".format(
-            archive_path.split("/")[-1].split(".")[0]))
         return True
     except Exception:
         return False
