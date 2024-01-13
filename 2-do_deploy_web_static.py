@@ -22,31 +22,20 @@ def do_deploy(archive_path):
     # Check if the archive file exists in the archive_path
     if exists(archive_path) is False:
         return False
-    # Store the file web_static_20240112161003.tgz in filename
-    filename = archive_path.split('/')[-1]
-
-    no_extension = '/data/web_static/releases/' + "{}".format(
-            filename.split('.')[0]
-            )
-    tmp = "/tmp/" + filename
 
     try:
-        # ^ Upload the archive to the /tmp/ directory of the web server
+        filename = archive_path.split("/")[-1]
+        no_extension = filename.split(".")[0]
+        path = "/data/web_static/releases/"
         put(archive_path, "/tmp/")
-        # Extract the archive to the folder /data/web_static/releases/
-        # <archive filename without extension> on the web server
-        run("mkdir -p {}/".format(no_extension))
-        run("tar -xzf {} -C {}/".format(tmp, no_extension))
-        run("rm {}".format(tmp))
-        run("mv {}/web_static/* {}/".format(no_extension, no_extension))
-        # Delete the archive from the web server
-        run("rm -rf {}/web_static".format(no_extension))
-        # Delete the symbolic link /data/web_static/current from the web server
+        run("mkdir -p {}{}/".format(path, no_extension))
+        run("tar -xzf /tmp/{} -C {}{}/".format(filename, path,  no_extension))
+        run("rm /tmp/{}".format(filename))
+        run('mv {0}{1}/web_static/* {0}{1}/'.format(path, no_extension))
+        run('rm -rf {}{}/web_static'.format(path, no_extension))
         run("rm -rf /data/web_static/current")
-        # Create a new the symbolic link /data/web_static/current on the
-        # web server, linked to the new version of your code
-        # (/data/web_static/releases/<archive filename without extension>)
-        run("ln -s {}/ /data/web_static/current".format(no_extension))
+        run('ln -s {}{}/ /data/web_static/current'.format(path, no_extension))
+        print("New version deployed!")
         return True
     except Exception:
         return False
