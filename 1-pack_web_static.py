@@ -21,7 +21,7 @@ def do_pack():
     result = local("tar -cvzf {} web_static".format(filename))
 
     # return the archive path if the file was created successfully
-    if result.failed:
-        return None
-    else:
+    if result is not None:
         return filename
+    else:
+        return None
