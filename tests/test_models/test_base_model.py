@@ -74,6 +74,12 @@ class test_basemodel(unittest.TestCase):
         with self.assertRaises(TypeError):
             new = self.value(**n)
 
+    def test_kwargs_one(self):
+        """ """
+        n = {'Name': 'test'}
+        with self.assertRaises(KeyError):
+            new = self.value(**n)
+
     def test_id(self):
         """ """
         new = self.value()
@@ -87,7 +93,14 @@ class test_basemodel(unittest.TestCase):
     def test_updated_at(self):
         """ """
         new = self.value()
+        #print(f"before save: {new.updated_at}")
         self.assertEqual(type(new.updated_at), datetime.datetime)
+
+        import time
+        time.sleep(1)
+        new.save()
+
+        #print(f"after save: {new.updated_at}")
         n = new.to_dict()
         new = BaseModel(**n)
-        self.assertNotEqual(new.created_at, new.updated_at)
+        self.assertFalse(new.created_at == new.updated_at)
